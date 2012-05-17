@@ -1,0 +1,17 @@
+#menu ul{	
+	padding-top: 0px;
+	margin-top: 1px;
+}
+
+#menu ul li a.current{ 
+	margin-top: -9px;
+	zoom: 1;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=0,strength=4),
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=45,strength=4),	
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=90,strength=4),	
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=135,strength=4),	
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=180,strength=4),
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=225,strength=4),	
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=270,strength=2),
+	progid:DXImageTransform.Microsoft.Shadow(color=#f9bb04,direction=315,strength=2);	
+}

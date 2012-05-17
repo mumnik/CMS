@@ -1,0 +1,228 @@
+<!-- BEGIN: main -->	   
+	<script src="{GL.base}/assets/standard/js/jquery.dragsort-0.5.1.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(
+			function()
+			{
+				$("#admingallery").dragsort(
+					{ 
+						dragSelector		: "div", 
+						dragEnd				: saveOrder, 
+						placeHolderTemplate	: "<li class='placeHolder'><div></div></li>" 
+					}
+				);
+			}
+		);
+		
+		function saveOrder()
+		{
+			var data = $("#admingallery li").map(
+				function()
+				{ 
+					return $(this).data("itemid");
+				}
+			).get();
+			
+			$.post(
+				'index.php', 
+				{ 
+					'module'	: 'gallery',
+					'action'	: 'changeImageOrd',
+					'galleryid'	: {galleryid},
+					"ids[]"		: data					
+				}
+			);
+		}
+		
+		function setImageMain(imageid)
+		{
+			$('#admingallery .ui-checkbox').removeClass('ui-checkbox-state-checked');
+			$('#admingallery .setMainChk').attr('checked', false);						
+			$.post('index.php', 
+				{ 
+					module		: 'gallery', 
+					action		: 'setImageMain', 
+					imageid		: imageid, 
+					galleryid	: {galleryid}
+				},
+				function(data)
+				{
+					if (data.status === "OK")
+						$('#admingallery #image_cont_' + data.id + ' .ui-checkbox').addClass('ui-checkbox-state-checked');
+					else 
+						alert('Error occured!');
+				}
+			);
+		}
+		
+		function renameImage(imageid)
+		{
+			var data = {};
+			
+			$.each(
+				$('#image_cont_' + imageid + ' .imagetitle'),
+				function(obj, i)
+				{
+					data[$(this).attr('id')] = $(this).val();
+				}
+			);
+			
+			$.post(
+				'index.php',
+				{
+					module		: 'gallery',
+					action		: 'renameImage', 
+					imageid		: imageid, 
+					data		: data
+				}, 
+				function(data)
+				{
+					if (data.status === 'FAILURE')
+						alert('Error occured');					
+				}
+			);
+		}
+		
+		function deleteImage(imageid)
+		{
+			$.post(
+				'index.php',
+				{
+					module		: 'gallery',
+					action		: 'deleteImage',
+					imageid		: imageid
+				},
+				function(data)
+				{
+					if (data.status === 'FAILURE')
+						alert('Error occured');
+					else
+						$('#admingallery #image_cont_' + data.id).remove();
+				}
+			)
+		}
+		
+	</script>
+	
+	<div id="page-heading">
+		<h1>Load images</h1>
+	</div>	
+
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+	<tr>
+		<th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+		<th class="topleft"></th>
+		<td id="tbl-border-top">&nbsp;</td>
+		<th class="topright"></th>
+		<th rowspan="3" class="sized"><img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
+	</tr>	
+	<tr>
+		<td id="tbl-border-left"></td>
+		<td>		
+			<div id="content-table-inner">			
+				<!--  start table-content  -->
+				<div id="table-content">
+					<div class="ta-l">
+						<h1>{gallerytitle}</h1>
+					</div>			
+					<form enctype="multipart/form-data" action="index.php?module=gallery&action=uploadimage&galleryid={galleryid}" method="post">	
+						<table border="0" width="70%" cellpadding="0" cellspacing="0" id="product-table">
+						<tbody>
+							<tr class="header">
+								<th class="table-header-repeat line-left minwidth-1"><a href="">Upload image</a></th>
+								<th class="table-header-repeat line-left minwidth-1"><a href="">URL</a></th>
+								<th class="table-header-repeat line-left minwidth-1"><a href="">Title</a></th>								
+								<th class="table-header-repeat line-left minwidth-1"><a href="">Main</a></th>
+								<th class="table-header-repeat line-left minwidth-1"><a href="">Enter</a></th>
+							</tr>
+							<tr>
+								<td>
+									<input type="hidden" name="nookid" value="{storeddata_nookid}" />				
+									<input type="file" name="uploadedfile" size="30" />
+								</td>
+							   <td>
+									<input type="text" name="videourl" value="" style="margin-right: 10px;" />
+								</td>
+								<td>
+									<!-- BEGIN: titlelangs -->
+									<table style="width: 200px; margin-right: 10px;">
+										<!-- BEGIN: titlelang -->
+										<tr>
+											<td>
+												<span style="text-transform: capitalize">{tlang}:</span>&nbsp;
+												<input style="float:right; margin-right: 10px;" type="text" name="title[{tlang}]" value="" />
+											</td>
+										</tr>
+										<!-- END: titlelang -->
+									</table>
+									<!-- END: titlelangs -->
+								</td>								
+								<td>
+									<input type="checkbox" name="main" />
+								</td>
+								<td>
+									<input type="submit" value="upload" />
+								</td>
+							</tr>
+						</tbody>
+						</table>
+					</form>   
+
+					<!-- BEGIN: pics -->
+					<ul id="admingallery">						
+						<!-- BEGIN: image -->		
+						<li class="ta-c placeHolder" data-itemid="{imageid}" id="image_cont_{imageid}">
+							<div>								
+								<p>
+									<a href="{GL.base}/gallery/original/{file}" target="_blank">
+										<img src="{GL.base}/gallery/admin_thumbs/{file}" alt="{index}" border="0"/>
+									</a>
+								</p>
+								<p>										
+									<table>
+									<!-- BEGIN: imagetitlerow -->
+									<tr>
+										<td>
+											<label>{tlang}:</label>									
+										</td>
+										<td>
+											<input type="text" name="title[{tlang}]" value="{imagetitle}" class="imagetitle" id="{tlang}">																				
+										</td>
+									</tr>
+									<!-- END: imagetitlerow -->
+									</table>										
+									<input type="button" value="Rename" onClick="javascript: if (confirm('Are you sure?')) renameImage({imageid});">									
+								</p>
+								<p style="padding-left: 65px; padding-top: 5px;">
+									<label for="{imageid}_setMain" class="l">Main:</label>
+									<input type="checkbox" {main} class="setMainChk" id="setMain_{imageid}" onClick="javascript: setImageMain({imageid});">										
+								</p>
+								<p>								
+									<!--<form action="index.php?module=gallery&action=eraseImage" method="post">
+										<input type="hidden" name="galleryid" value="{galleryid}">
+										<input type="hidden" name="file" value="{file}">
+										<input type="hidden" name="imageid" value="{imageid}">
+										<input type="submit" value="Delete" onClick="javascript: if (!confirm('Are you sure?')) return false;">
+									</form> -->
+									<input type="button" value="Delete" onClick="javascript: if (confirm('Are you sure?')) deleteImage({imageid});">
+								</p>								
+							</div>															
+						</li>
+						<!-- END: image -->						
+					</ul>					
+					<!-- END: pics -->
+					<div class="clear"></div>
+				</div>			
+				<div class="clear"></div>		 
+			</div>		
+		</td>
+		<td id="tbl-border-right"></td>
+	</tr>
+	<tr>
+		<th class="sized bottomleft"></th>
+		<td id="tbl-border-bottom">&nbsp;</td>
+		<th class="sized bottomright"></th>
+	</tr>
+	</table>
+	<div class="clear">&nbsp;</div>    
+<!-- END: main -->

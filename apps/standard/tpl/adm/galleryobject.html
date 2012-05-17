@@ -1,0 +1,174 @@
+<!-- BEGIN: main -->	   
+	
+	<div id="page-heading">
+		<h1>Load images</h1>
+	</div>
+	
+
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+	<tr>
+		<th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+		<th class="topleft"></th>
+		<td id="tbl-border-top">&nbsp;</td>
+		<th class="topright"></th>
+		<th rowspan="3" class="sized"><img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
+	</tr>
+	<tr>
+		<td id="tbl-border-left"></td>
+		<td>	
+			<div id="content-table-inner">				
+				<div id="table-content">	
+						<h3 class="ta-l">Upload File</h3>
+						<form enctype="multipart/form-data" action="index.php?module={module}&action=uploadimage&id={id}" method="post" id="uploadform">	
+							<table border="0" width="70%" cellpadding="0" cellspacing="0" id="product-table">
+							<tbody>
+								<tr class="header">
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">File</a>
+									</th>
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">URL</a>
+									</th>
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">Title</a>
+									</th>
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">Index</a>
+									</th> 
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">Link</a>
+									</th>
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">Main</a>
+									</th>
+									<th class="table-header-repeat line-left minwidth-1">
+										<a href="">Enter</a>
+									</th>
+								</tr>
+								<tr>
+									<td>								
+										<input type="file" name="{filetoupload}" size="30"/>
+									</td>
+									<td>
+										<input type="text" name="data[videourl]" value="" style="margin-right: 10px;" class="tooltip" title="Enter YouTube URL"/>
+									</td>
+									<td>
+										<!-- BEGIN: titlelangs -->
+										<ul class="grid">
+											<!-- BEGIN: titlelang -->
+											<li>												
+												<label for="upload_title_{lang}" class="capitalize" >{lang}:</label>
+												<input style="margin-right: 10px;" 
+													type="text" name="data[title][{lang}]" 
+													id="upload_title_{lang}" value="" class="tooltip" 
+													title="Enter title or language {lang} here" />												
+											</li>
+											<!-- END: titlelang -->
+										</ul>
+										<!-- END: titlelangs -->
+									</td>
+									<td>
+										<input type="hidden" name="data[sortindex]" value="{sortindex}" />
+										<input type="text" maxlength="4" size="4" value="{sortindex}" disabled/>
+									</td> 
+									<td>
+										<input type="text" name="data[link]" value="" style="margin-right: 10px;" class="tooltip" title="Link for image (if implemented)"/>
+									</td>
+									<td class="tooltip ta-c" title="Check to set image main">
+										<input type="checkbox" name="data[main]" value="1" />
+									</td>
+									<td>
+										<input type="image" value="upload" src="images/forms/upload.png"/>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+						</form>   
+
+						<!-- BEGIN: pics -->
+						<h3 class="ta-l">Uploaded Files</h3>
+						<div>
+							<!-- BEGIN: image -->
+							<div class="admin_thumb">
+								<ul class="grid">
+									<li>
+										<a href="{GL.base}/gallery/original/{data.file}" target="_blank">
+											<img src="{GL.base}/gallery/admin_thumbs/{data.file}" class="thumb" alt="{index}"/>
+										</a>
+									</li>
+									<li class="ta-l">
+										<form method="post" action="index.php?module={data.module}&action=renameimage&id={id}" id="{data.id}_rename_frm">								
+											<input type="hidden" name="imageid" value="{data.id}">
+											<strong>Title:</strong>
+											<ul>
+												<!-- BEGIN: imagetitlerow -->
+												<li class="tooltip" title="You can change image name here">
+													<dl>
+														<dd>
+															<label for="{data.id}_title_{lang}" class="capitalize">{lang}:</p>
+														</dd>
+														<dt>
+															<input type="text" name="data[title][{lang}]" id="{data.id}_title_{lang}" value="{imagetitle}">
+														</dt>
+													</dl>
+												</li>
+												<!-- END: imagetitlerow -->
+												<li class="ta-c">
+													<br>
+													<input type="image" src="images/forms/reset.png" onClick="javascript: this.form.reset(); return false;">
+													<input type="image" src="images/forms/rename.png" value="Rename" onClick="javascript: if (!confirm('Are you sure?')){ return false; }">										
+												</li>
+											</ul>
+										</form>									
+									</li>									
+									<li>																				
+										<div class="holder">
+											<span >Index:</span>&nbsp;
+											<form method="post" action="index.php?module={data.module}&action=changesortindex&id={id}" >
+												<input type="hidden" name="imageid" value="{data.id}">
+												<input type="hidden" name="direction" value="up">
+												<input type="image" src="images/shared/green_arrow_up.png" class="tooltip" title="Press up to move image up">
+											</form>											
+											<span >{data.sortindex}</span>
+											<form method="post" action="index.php?module={data.module}&action=changesortindex&id={id}" >
+												<input type="hidden" name="imageid" value="{data.id}">
+												<input type="hidden" name="direction" value="down">
+												<input type="image" src="images/shared/green_arrow_down.png" class="tooltip" title="Press down to move image down">
+											</form>
+										</div>
+									</li>
+									<li>
+										<div class="holder">										
+											<span class="l">Main:&nbsp;</span>
+											<form method="post" action="index.php?module={data.module}&action=setimagemain&id={id}" id="{data.id}_main_frm" class="l tooltip" title="Check to set image main">
+												<input type="checkbox" {data.main}  onClick="javascript: if (confirm('Are you sure?')){ $('#{data.id}_main_frm').submit(); }">										
+												<input type="hidden" name="imageid" value="{data.id}">
+											</form>										
+											<div class="clear"></div>
+										</div>
+									</li>
+									<li>
+										<form action="index.php?module={data.module}&action=eraseimage&id={id}" method="post">																		
+											<input type="hidden" name="imageid" value="{data.id}">
+											<input type="image"  value="Delete" src="images/forms/delete.png" onClick="javascript: if (!confirm('Are you sure?')){ return false; }">
+										</form>										
+									</li>
+								</ul>														
+							</div>
+							<!-- END: image -->							
+						</div>
+						<!-- END: pics -->
+				</div>			
+				<div class="clear"></div>		 
+			</div>		
+		</td>
+		<td id="tbl-border-right"></td>
+	</tr>
+	<tr>
+		<th class="sized bottomleft"></th>
+		<td id="tbl-border-bottom">&nbsp;</td>
+		<th class="sized bottomright"></th>
+	</tr>
+	</table>
+	<div class="clear">&nbsp;</div>    
+<!-- END: main -->

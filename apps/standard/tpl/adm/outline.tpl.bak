@@ -1,0 +1,51 @@
+<!-- BEGIN: main -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>Admin</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="{GL.base}/css/all.css" type="text/css" />
+
+</head>
+<body>
+<div id="main">
+	<div id="header">
+		<ul id="top-navigation">
+			<li><span><span><a href="{GL.base}/adm/index.php?module=modules">Modules</a></span></span></li>
+			<li><span><span><a href="{GL.base}/adm/index.php?module=news&type=standart">News</a></span></span></li>
+<!-- 			<li><span><span><a href="{GL.base}/adm/index.php?module=articles">Articles</a></span></span></li> -->
+<!--			<li><span><span><a href="{GL.base}/adm/index.php?module=events">Events</a></span></span></li> -->
+<!--			<li><span><span><a href="{GL.base}/adm/index.php?module=league">League</a></span></span></li>
+			<li><span><span><a href="{GL.base}/adm/index.php?module=player">Players</a></span></span></li> -->
+<!--			<li><span><span><a href="{GL.base}/adm/index.php?module=products">Products</a></span></span></li> 
+			<li><span><span><a href="{GL.base}/adm/index.php?module=categories">Categories</a></span></span></li> -->
+			<li><span><span><a href="{GL.base}/adm/index.php?module=uploads">Uploads</a></span></span></li>
+			<li><span><span><a href="{GL.base}/adm/index.php?module=words">Words</a></li>
+			<li><span><span><a href="{GL.base}/adm/index.php?module=nooks">Nooks</a></li>
+			<li><span><span><a href="{GL.base}/adm/index.php?module=gallery">Galleries</a></li>
+			<li><span><span><a href="{GL.base}/adm/index.php?module=exit">Exit</a></li>
+
+		</ul>
+	</div>
+	<div id="middle">
+		<div id="center-column">
+			<div class="top-bar">
+				
+				<h1>Admin Page</h1>
+				<div class="breadcrumbs">Control Your Web-Site</div>
+			</div><br />
+			<div class="select-bar"></div>
+			<center>
+				{content}	
+			</center>
+
+		</div>
+	</div>
+	<div id="footer"></div>
+</div>
+
+
+</body>
+</html>
+<!-- END: main -->

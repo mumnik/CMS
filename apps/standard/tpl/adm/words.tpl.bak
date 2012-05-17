@@ -1,0 +1,68 @@
+<!-- BEGIN: main -->
+	<!-- BEGIN: table -->
+	<table cellpadding="0" cellspacing="0" class="listing" width="100%">
+	<tbody>
+	<tr>
+		<td colspan="5" align="center">
+			Language: <form method="post" action="index.php?module=words">
+				<select name="lang">
+					{langoptions}
+				</select>
+				<input type="submit" value="Go">
+			</form>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" align="center">			
+				New Word:
+		</td>
+	</tr>
+	<tr>
+		<td colspan="5" align="center">			
+<!--		<div id="newword" style="display:none">-->
+			<div id="newword">
+				<form method="post" action="index.php">
+				<input type="hidden" name="action" value="saveword" />
+				String:	<input type="text" name="word[string]" id="string">
+				Data:	<input type="text" name="word[data]" id="data">
+					<input type="hidden" name="word[lang]" value="{lang}">
+					<input type="submit" value="Create">
+				</form>
+				 <input type="button" value="Cancel" onClick="javascript: document.getElementById('word').value='';document.getElementById('data').value=''; document.getElementById('newword').style.display='none';document.getElementById('nbutton').style.display='block';">
+			</div>
+<!--
+			<div id="nbutton" style="display:block">
+				<input type="button" value="New" onClick="document.getElementById('newword').style.display='block';document.getElementById('nbutton').style.display='none';">
+			</div>
+-->
+			</td>
+		</tr>
+	
+	<tr class="header">
+		<td>ID</td>
+		<td>String</td>
+		<td>Value</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<!-- BEGIN: row -->
+	<tr>
+		<td>{wordid}</td>
+		<td>{string}</td>
+		<td>{data}</td>
+		<td>{edit}</td>
+		<td>
+			<form action="index.php" method="post" name="frm{wordid}erase">
+				<input type="hidden" name="action" value="deleteword">
+				<input type="hidden" name="wordid" value="{wordid}">	
+				<input type="hidden" name="lang" value="{lang}">				
+			</form>
+			<input type="button" value="Erase" onClick="javascript: if (confirm('Are you sure?')){ document.frm{wordid}erase.submit();
+			}">
+		</td>
+	</tr>
+	<!-- END: row -->
+	</tbody>
+	</table>
+	<!-- END: table -->
+<!-- END: main -->

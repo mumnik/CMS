@@ -1,0 +1,42 @@
+<!-- BEGIN: main -->
+	<!-- BEGIN: nooktypes -->
+    <table class="listing">
+    <tr>
+    	<td>
+        	Title:
+        </td>
+        <Td>
+        	Edit:
+        </Td>
+        <td>
+        	Erase:
+        </td>        
+    </tr>
+    <!-- BEGIN: nooktype -->
+    <tr>
+    	<td>
+        	{title}
+        </td>
+        <td><a href="index.php?module=nooks&action=editnooktype&nookid={id}"><img height="16" width="16" alt="" src="{GL.base}/img/edit-icon.gif"/></a></td>
+        <td>
+        	<a href="index.php?module=nooks&action=erasenooktype&nookid={id}"><img height="16" width="16" alt="" src="{GL.base}/img/hr.gif"/></a>
+        </td>
+    </tr>
+    <!-- END: nooktype -->
+    </table>
+
+    <form method="post" action="index.php?module=nooks&action=createnooktype">
+    	<tr>
+            <td>
+                <input type="text" name="field[title]" />
+            </td>
+    	</tr>
+        <tr>
+        	<td colspan="4">
+            	<input type="submit" value="Create">
+            </td>
+        </tr>
+    </form>
+
+    <!-- END: nooktypes --> 
+<!-- END: main -->

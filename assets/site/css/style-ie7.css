@@ -1,0 +1,30 @@
+#bg {
+	/*display: none;*/
+	background-position: bottom;
+	background-repeat: repeat-x;
+	background-image: url('images/sea.png');
+}
+
+#bg table {
+	display: none;
+	
+}
+
+#ieclouds{
+	min-width: 960px;
+	position: fixed;
+	z-index: -1;	
+}
+
+body{
+	
+}
+
+#navpane ul li {
+	display: inline;
+}
+
+#menu .menuitem div.menubg{	
+	top: 400px;
+	left: 0;
+}

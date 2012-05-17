@@ -1,0 +1,34 @@
+#php_flag display_errors ON
+#php_flag magic_quotes_gpc Off
+
+Options +FollowSymLinks
+Options -Indexes
+
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+
+RewriteBase /adm
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule /images/(.*)\.(png|jp?g|gif)$ .$0 [R,L,NC]
+#RewriteRule /i/(.*)\.(png|jp?g|gif)$ .$0 [R,L,NC]
+#RewriteRule /css/(.*)\.(css)$ .$0 [R,L,NC]
+#RewriteRule /js/(.*)\.(js)$ .$0 [R,L,NC]
+
+#RewriteCond %{THE_REQUEST} \ (.*)//+(.*)\  [NC]
+#RewriteRule .* %1/%2 [R=301,L]
+
+RewriteRule ^([a-zA-Z0-9]+)[/]{0,1}$ ./?language=$1
+RewriteRule ^([a-zA-Z0-9]+)/([a-zA-Z0-9\-]+)[/]{0,1}$ ./?language=$1&module=$2
+RewriteRule ^([a-zA-Z]+)/([a-zA-Z0-9\-]+)/([a-zA-Z0-9\-]+)[/]{0,1}$ ./?language=$1&module=$2&action=$3
+RewriteRule ^([a-zA-Z]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9]+)[/]{0,1}$ ./?language=$1&module=$2&action=$3&mode=$4
+
+</IfModule>
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>

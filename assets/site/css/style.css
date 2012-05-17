@@ -1,0 +1,258 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+	margin: 0;
+}
+
+html {
+	background-color: #728d32;	
+	background-image: url("../images/grass.png");
+}
+
+body, html{	
+	
+	margin: 0;
+	padding: 0;	
+}
+
+#wrapper {
+	width:940px;	
+	margin: 0 auto;
+	font-family: Tahoma, Segoe UI, Arial, Helvetica, Sans-Serif;
+	font-size: 14px;
+/*	min-height: 100%;
+	height: auto !important;
+	height: 100%;*/
+}
+
+
+#header {
+	margin-top: 44px;
+	padding-top: 22px;
+	width: 100%;
+}
+
+#langpane{
+	float: right;
+	margin-top: 15px;
+	padding-top: 8px;
+	}
+
+.clear{
+	clear:both;
+}
+
+/*#background {
+	position: fixed; 
+	top:0; 
+	left:0; 
+	width:100%;
+	height: 100%; 
+	z-index:-1;
+}*/
+
+table#background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+}
+
+table#background .bgtop{
+	height: 264px;
+	overflow: hidden;
+}
+
+table#background .bgtop img#clouds{	
+	top: 0;
+	margin-left: 100px;
+	/*position: absolute;
+	z-index: -1;
+	top: 0;
+	left: 50%;
+	margin-left: -354px;*/
+}
+
+table#background .bgtop img#midrgrass{
+	margin-top: 12px;
+	margin-bottom: -12px;
+}
+
+table#background td.bgtop{
+	background-image:url('../images/sky.png');
+	background-repeat: repeat-x;
+	padding: 0;
+}
+
+table#background td.bgbottom #shadowlogo{	
+	position: absolute;
+	left:270px;
+	top: 690px;
+}
+
+table#background td.bgbottom #footprints{
+	position: absolute;
+	top:350px;
+	right: 40px;
+}	
+
+#langpane {
+	float: right;
+	margin-top: -23px;
+	margin-right: 85px;
+}
+
+#langpane a{
+	color: #fff;
+	margin-right: 18px;
+	text-decoration: none;
+}
+
+#langpane a.active{
+	color: #000;
+/*	font-weight: bold;*/
+}
+
+#logo {
+	float:left;
+	margin-left: 27px;	
+}
+
+#logotext {
+	float: left;
+	font-weight: bold;
+	margin-left: 15px;
+	margin-top: 80px;
+}
+
+#menu{
+	/*margin-top: -5px;*/
+	background: url('../images/menu.png') no-repeat 100%;
+	height: 60px;
+}
+/*
+#menu ul{
+	width: 100%;
+	margin-left: 30px;
+	float: left;
+}
+ 
+#menu ul li{
+    display: inline;
+}
+ 
+#menu ul li a{    
+	float:left;
+	text-decoration: none;
+	margin-right: 40px;
+	margin-top: 25px;
+	color: #fff;	
+}
+ 
+#menu ul li a.current{    
+    color: #000;
+	text-shadow: 0 0 10px #fff;	
+}
+*/
+#content {
+	background-color: #e2e2e2;
+	min-height: 460px;
+	/*position: relative;*/
+	-moz-box-shadow: 3px 3px 3px #222;
+	-webkit-box-shadow: 3px 3px 4px #222;
+	box-shadow: 3px 3px 3px #222;
+	/* For IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=35, Color='#222')";
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#222222, direction=135, strength=6);	
+}
+
+#content_wrapper{
+	margin: 0 5em;
+	padding: 1em 0;
+}
+
+#bshadow {
+	width: 100%;	
+}
+
+#rshadow {
+	position: absolute;
+	height:100%;
+	float: right;
+}
+
+#glasses{
+	position: absolute;
+	float: right;
+	margin-left: 865px;
+	margin-top: -7px;
+	z-index: 1;
+}
+
+#balls{
+position: absolute;
+float: right;
+margin-top: -145px;
+margin-left: 595px;
+z-index: -1;
+}
+
+#social {
+position: absolute;
+float: right;
+margin-left: 848px;
+margin-top: -50px;
+}
+
+#social #twit {
+float: left;
+margin-left: -35px;
+}
+
+#social #face {
+float: left;
+margin-top: 20px;
+width: 50px;
+margin-left: 50px;
+}	
+
+#about  {
+	margin: 42px 45px 42px 45px ;
+	float: left;
+	color: #011550;
+	text-align: justify;
+}
+
+#about p {
+	margin-bottom: 10px;
+}
+
+ul.more{
+	margin-left: 17px;
+	list-style-type:circle;
+}
+
+.image {
+	float:left;
+	display:inline;
+	z-index: 0;
+	position: absolute;
+}
+
+
+.innerwrapper{
+	margin-left: auto;
+	margin-right: auto;
+	width: 800px;
+}
+
+
+
+/*#shield1{
+	float:right;
+	margin-top: -237px;
+}*/
+

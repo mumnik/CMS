@@ -1,0 +1,58 @@
+<!-- BEGIN: main -->
+	<script>
+		function pathsubmit(f){
+			document.getElementById('pathtogo').value+=f;
+			document.frmgo.submit();
+		}
+	</script>
+	<!-- BEGIN: table -->
+	<table cellpadding="0" cellspacing="0" class="tableinfo">
+	<tbody>
+	<tr class="header">
+		<td colspan="4">{path}</td>
+	</tr>
+		<!-- BEGIN: row -->
+		<tr>
+			<td>{href}</td>				
+			<td>{size}</td>
+			<td>{delete}</td>
+			<td>{rename}</td>			
+		</tr>
+		<!-- END: row -->
+		<tr>
+			<td colspan="4">
+				<div style="display:none" id="makedir">
+					<form action="index.php?module=makedir" method="post">
+
+						<input type="hidden" name="path" value="{path}">
+						Directory name:<input type="text" name="filename">
+						<input type="submit" value="OK">
+					</form>
+					<input type="button" onclick="javascript: document.getElementById('makedir').style.display='none';" value="Cancel">
+				</div>			
+				<div id="uploadfile" style="display:none">
+					<form action="index.php?module=uploadfile" method="post" enctype="multipart/form-data">
+
+						<input type="hidden" name="path" value="{path}">
+						Browse:<input type="file" name="filename">
+						<input type="submit" value="OK">
+					</form>
+					<input type="button" onclick="javascript: document.getElementById('uploadfile').style.display='none';" value="Cancel">			
+				</div>		
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="button" onclick="javascript: document.getElementById('makedir').style.display='block';" value="New directory">
+			</td>
+			<td>
+				<input type="button" onclick="javascript: document.getElementById('uploadfile').style.display='block';" value="Upload">
+			</td>
+		</tr>
+	</tbody>
+	</table>
+	<!-- END: table -->
+	<form action="index.php?module=uploads" name="frmgo" method="post">
+		<input type="hidden" name="path" id="pathtogo" value="{path}/">
+	</form>
+<!-- END: main -->

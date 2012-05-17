@@ -1,0 +1,287 @@
+<?php
+	
+	class obj extends Model{
+	
+		protected $table = 'objects';
+		
+		private $bindings = array(
+			'description' => array(
+					'table' => 'description', 
+					'update' => true,
+					'key' => array(
+						'id' => 'objectid'
+					),
+					'data' => array(
+						'key' => 'lang',
+						'value' => 'string'
+					)
+				),
+			'street' => array(
+					'table' => 'street',
+					'update' => true,
+					'key' => array(
+						'id'=>'objectid'
+					),
+					'data' => array(
+						'key' => 'lang',
+						'value' => 'string'
+					)
+				)
+		);
+		
+		private $objects;
+		
+		public $uses = array('Gallery'=>array());		
+		
+		public function __construct(){
+			parent::__construct();
+		}
+		
+		public function get($id)
+		{
+			
+			if (!$this->objects[$id]){
+			
+				$sql = 'select ' . $this->table . '.* ';
+				
+				if (sizeof($this->bindings)){				
+					foreach ($this->bindings as $table=>$data){
+						//$combinedtable = $this->table.$table;
+						$sql .= ', ' . $table . '.' . $data['data']['key'] . ' as ' 
+							. $table.'key, ' . $table . '.' . $data['data']['value'] . ' as '.$table.'string ';
+					}
+				}			
+				$sql .= 'from ' . $this->table . ' ';
+				if (sizeof($this->bindings)){
+					foreach ($this->bindings as $table=>$data){
+						$combinedtable = $this->table.$table;
+						$sql .= ' left join ' . $combinedtable . ' as ' . $table . ' on ';
+						foreach ($data ['key'] as $lk => $rk){
+							$sql .= $this->table . '.' . $lk . '=' . $table . '.' . $rk;
+						}
+					}
+				}
+				$sql .= ' where ' . $this->table . '.id ="'.$id.'"';
+				
+				$res = mysql_query($sql);
+				if ($res){
+					$row = mysql_fetch_assoc($res);
+					
+					$cityObj = new city();		
+					$city = $cityObj->getCity($row['cityid']);
+					$row['city'] = $city['title'];
+					$row['district'] = $city['district'];
+					$row['images'] = $this->Gallery->getImages($row['galleryid']);				
+					$row['mainimage'] = false;
+					for ($i = 0; $i<sizeof($row['images']); $i++){
+						if ($row['images'][$i]['main']==1){
+							$row['mainimage'] = $row['images'][$i];
+						}
+					}
+					$this->objects[$id] = $row;
+					
+					return $row;					
+				}
+				return false;
+			}
+			else {
+				return $this->objects[$id];
+			}
+		}
+		
+		public function getList($lang=false, $orderby=false, $order='ASC')
+		{
+		global $CONF;
+		
+			if (!$lang)
+			{
+				$lang = $CONF['languages'][0];
+			}
+			
+			$sql = 'select ' . $this->table . '.* ';
+			
+			if (sizeof($this->bindings)){				
+				foreach ($this->bindings as $table=>$data){
+					//$combinedtable = $this->table.$table;
+					$sql .= ', ' . $table . '.' . $data['data']['key'] . ' as ' 
+						. $table.'key, ' . $table . '.' . $data['data']['value'] . ' as '.$table.'string ';
+				}
+			}			
+			$sql .= 'from ' . $this->table . ' ';			
+			if (sizeof($this->bindings)){
+				foreach ($this->bindings as $table=>$data){
+					$combinedtable = $this->table.$table;
+					$sql .= ' left join ' . $combinedtable . ' as ' . $table . ' on ';
+					foreach ($data ['key'] as $lk => $rk){
+						$sql .= $this->table . '.' . $lk . '=' . $table . '.' . $rk;
+					}
+				}
+			}			
+			$res = mysql_query($sql);
+			$result = false;
+			
+			$cityObj = new city();
+			
+			while ($row = mysql_fetch_assoc($res)){
+				$city = $cityObj->getCity($row['cityid']);
+				$row['images'] = $this->Gallery->getImages($row['galleryid']);
+				$row['mainimage'] = false;
+				for ($i = 0; $i<sizeof($row['images']); $i++){
+					if ($row['images'][$i]['main']==1){
+						$row['mainimage'] = $row['images'][$i];
+					}
+				}
+				$row['city'] = $city['title'][$lang];
+				$row['district'] = $city['district'][$lang];
+				$result[] = $row;
+			}
+			
+			return $result;
+		}		
+		
+		public function create($data)
+		{
+			$arrays = false; //test feature to avoid rewritin code over and over again
+		
+			$galleryid = $this->Gallery->createGallery(get_class($this));
+			
+			$data['galleryid'] = $galleryid;
+			
+			$sql = 'insert into '.$this->table.' set ';
+			$f='';
+			
+			foreach ($data as $key=>$val){
+				if (!is_array($val))
+				{
+					$sql .= $f . $key . '= "' . mysql_escape_string($val) . '"'; 
+					$f=',';
+				} 
+				else {
+					$arrays[] = $key;
+				}
+			}		
+			mysql_query($sql);
+			
+			$id = mysql_insert_id();
+	
+			if (sizeof($arrays)){
+				foreach ($arrays as $dependenttable){
+					$table2 = $this->table . $dependenttable;					
+					$f = '';
+					
+					foreach($this->bindings[$dependenttable]['key'] as $lk=>$rk){
+						$localkey = $lk;
+						$remotekey = $rk;
+					}					
+					
+					foreach ($data[$dependenttable] as $key=>$val){
+						$sql = 'insert into ' . $table2 . ' set '.
+							$this->bindings[$dependenttable]['data']['key'] . ' = "'. 
+							mysql_escape_string($key) . '",' . 
+							$this->bindings[$dependenttable]['data']['value'] . ' = "' . $val . '", '.
+							$remotekey . ' = "' . $id . '"';
+						
+						mysql_query($sql);									
+					}
+				}
+			}			
+			
+		}
+		
+		public function edit($id, $data)
+		{
+			$sql = 'update '.$this->table.' set ';
+			$f='';
+			
+			foreach ($data as $key=>$val){
+				if (!is_array($val))
+				{
+					$sql .= $f . $key . '= "' . mysql_escape_string($val) . '"'; 
+					$f=',';
+				} 
+				else {
+					$arrays[] = $key;
+				}
+			}
+			
+			$sql .= ' where id = "' . $id . '"';
+			mysql_query($sql);
+			if (sizeof($arrays)){				
+				foreach ($arrays as $dependenttable){
+					$table2 = $this->table . $dependenttable;					
+					$f = '';
+					
+					foreach($this->bindings[$dependenttable]['key'] as $lk=>$rk){
+						$localkey = $lk;
+						$remotekey = $rk;
+					}					
+					
+					$sql = 'delete from '.$table2.' where '.$remotekey.'="'.$id.'"';
+					mysql_query($sql);
+					
+					foreach ($data[$dependenttable] as $key=>$val){
+						$sql = 'insert into ' . $table2 . ' set '.
+							$this->bindings[$dependenttable]['data']['key'] . ' = "'. 
+							mysql_escape_string($key) . '",' . 
+							$this->bindings[$dependenttable]['data']['value'] . ' = "' . $val . '", '.
+							$remotekey . ' = "' . $id . '"';
+						
+						mysql_query($sql);									
+					}
+				}
+			}
+			
+		}
+		
+		public function getGalleryImages($id = false){
+			$tmp  = $this->get($id);			
+			//$this->Gallery->setId($tmp['galleryid']);			
+			//$list = $this->Gallery->getImages();			
+			return $tmp['images'];
+		}
+		
+		public function getGalleryNextSortIndex($id){
+			$tmp  = $this->get($id);
+			$this->Gallery->setId($tmp['galleryid']);
+			return $this->Gallery->getNextSortIndex($tmp['galleryid']);
+		}
+		
+		public function gallerySetImageMain($objid=false, $imageid, $galleryid=false){
+			if (isset($objid))
+			{			
+				$galleryid = $this->get($objid);				
+				$galleryid = $galleryid['galleryid'];
+			}
+			$this->Gallery->setImageMain($imageid, $galleryid);
+		}
+		
+		public function addImage($id, $data){						
+			$tmp  = $this->get($id);
+			$this->Gallery->setId($tmp['galleryid']);
+			$this->Gallery->addImage(OBJ.'imagefile', false, false, $data);			
+		}
+		
+		public function removeImage($id){	
+			$this->Gallery->removeImage($id);
+		}
+		
+		public function erase($id){
+			
+			$tmp = $this->get($id);
+			$this->Gallery->eraseGallery($tmp['galleryid']);
+			
+			$sql = 'delete from '.$this->table.' where id="' . $id . '"';
+			mysql_query($sql);
+			if (sizeof($this->bindings))
+				foreach ($this->bindings as $dependenttable=>$data){
+					foreach($this->bindings[$dependenttable]['key'] as $lk=>$rk){
+						$localkey = $lk;
+						$remotekey = $rk;
+					}	
+					$sql = 'delete from ' . $this->table . $dependenttable . ' where ' . $remotekey . '="'.$id.'"';
+					mysql_query($sql);
+				}
+			
+		}
+	
+	}

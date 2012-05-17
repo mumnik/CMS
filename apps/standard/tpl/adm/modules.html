@@ -1,0 +1,236 @@
+<!-- BEGIN: main -->
+<script type="text/javascript" src="{GL.base}/assets/standard/js/jstree/jquery.jstree.js"></script>
+<script language="javascript">
+	function changemodstat(obj, moduleid){		 		
+		$.get(
+			'index.php', 
+			{ 
+				module: 	'modules', 
+				action: 	'changemodstat', 
+				stat: 		$(obj).attr('checked'), 
+				moduleid: 	moduleid
+			}, 
+			function(data)
+			{			
+			}
+		);		
+	}
+	
+	function erasemodule(moduleid)
+	{		
+		if (confirm("Are you sure?"))
+		{
+			$.post(
+				'index.php',
+				{
+					module: 	'modules',
+					action: 	'erasemodule',
+					moduleid: 	moduleid					
+				},
+				function(data)
+				{
+					if (data.status === 'OK')
+					{
+						console.log('module deleted');						
+					}
+				}
+			);
+		}
+	}
+	
+	function showChildren(cl){				
+		$('tr[class$="'+cl+'_mdl"]').show();
+		$('#'+cl+'_mdl_sc_link').hide();
+		$('#'+cl+'_mdl_hc_link').show();
+		setCookie('menushowing', cl, 1);
+	}
+	
+	function hideChildren(cl){		
+		$('.'+cl+'_mdl').hide();
+		$('#'+cl+'_mdl_hc_link').hide();
+		$('#'+cl+'_mdl_hc_link .'+cl).hide();
+		$('.'+cl+'_mdl .moduleshowchildren').show();
+		$('#'+cl+'_mdl_sc_link').show();
+		deleteCookie('menushowing', cl, 1);
+	}
+	
+	function deleteModule(moduleid)
+	{
+		$.get(
+			'index.php', 
+			{
+				action		: 'erasemodule', 
+				moduleid	: moduleid, 
+				module		: 'modules', 
+				ajax		: true
+			}, 
+			function(data){
+				if (data.status === 'OK')
+					window.location.reload();
+				else
+					alert('Error accured: ' . data.message);
+			}
+		);		
+	}	
+	
+</script>
+<script type="text/javascript" class="source below">
+	$(function () {		
+		$("#modulesholder")			
+			.jstree({
+				plugins			: ["themes","json_data","ui","crrm","dnd","search","types","contextmenu"],
+				json_data 		: {
+					ajax		: {
+						url		: 'index.php',
+						data	: function(n) {
+							return {
+								module		: 'modules',
+								action		: 'getmodulestree',
+								operation	: 'get_children',
+								id			: n.attr ? n.attr('id').replace('node_','') : 'root'
+							};
+						}
+					}
+				}				
+			})
+			.bind("create.jstree", function (e, data) {
+				$.post(
+					"index.php",
+					{
+						module		: 'modules',
+						operation	: "create_node",
+						id			: data.rslt.parent.attr("id").replace("node_",""),
+						position	: data.rslt.position,
+						title 		: data.rslt.name,
+						type 		: data.rslt.obj.attr("rel")
+					},
+					function (r) {
+						if (r.statu) 
+							$(data.rslt.obj).attr("id", "node_" + r.id);						
+						else 
+							$.jstree.rollback(data.rlbk);						
+					}
+				);
+			})
+			.bind("select_node.jstree", function (event, data) { 							
+				$.get(
+					'index.php', 
+					{
+						module		: 'modules',
+						action		: 'getModuleInfo',
+						ajax		: true,
+						moduleid	: data.rslt.obj.attr("id").replace("node_",""),
+					},
+					function(data){
+						var data = data.data;
+						$('#modulecontrols').html(
+							'<table class="modulecontrols" id="product-table">'+								
+								'<tbody>'+
+									'<tr class="header">'+
+										'<th class="table-header-repeat line-left minwidth-4">'+
+											'Title:'+
+										'</th>'+
+										'<th class="table-header-repeat line-left minwidth-1">'+
+											'Outline:'+
+										'<th class="table-header-repeat line-left minwidth-1">'+
+											'ID:'+
+										'</th>'+
+										'<th class="table-header-repeat line-left minwidth-1">'+
+											'Edit:'+
+										'</th>'+
+										'<th class="table-header-repeat line-left minwidth-2">'+
+											'Delete:'+
+										'</th>'+
+									'</tr>'+
+								'</thead>'+
+								'<tbody>'+
+									'<tr>'+
+										'<td>'+
+											data.title+
+										'</td>'+
+										'<td>'+
+											data.outline+
+										'</td>'+
+										'<td>'+
+											'<input type="text" name="moduleid" value="' + data.module + '">'+
+										'</td>'+
+										'<td>'+
+											'<a href="index.php?module=modules&action=editModule&moduleid=' + data.module + '">'+
+												'<img src="{GL.base}/adm/images/shared/pencil_icon.png">'+
+											'</a>'+
+										'</td>'+
+										'<td>'+
+											'<a href="#" class="icon-2 info-tooltip" onClick="javascript: if (!confirm(\'Are you sure?\')) return false; else deleteModule(\'' + data.module + '\');"></a>'+
+										'</td>'+
+									'</tr>'+
+								'</tbody>'+
+							'</table>'
+						);
+					}
+				);
+			})
+			.bind('move_node.jstree', function (e, data){
+				data.rslt.o.each(function(i){					
+					$.get('index.php',
+						{
+							module		: 'modules',
+							moduleid 			: $(this).attr("id").replace("node_",""),
+							action		: 'getmodulestree',
+							position	: data.rslt.cp + i,
+							title		: data.rslt.name,
+							ref 		: data.rslt.cr === -1 ? 1 : data.rslt.np.attr("id").replace("node_",""),
+							operation 	: 'moveNode'														
+						}
+					);
+				});
+			})
+			.delegate("a", "click", function (event, data) { 
+				event.preventDefault(); 
+			})
+		});
+</script>
+
+<div id="page-heading">
+	<h1>Modules</h1>
+</div>	
+<!-- BEGIN: table -->
+<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+<tr>
+	<th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+	<th class="topleft"></th>
+	<td id="tbl-border-top">&nbsp;</td>
+	<th class="topright"></th>
+	<th rowspan="3" class="sized"><img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" /></th>
+</tr>
+<tr class="header">
+	<td id="tbl-border-left"></td>
+	<td>
+		<div id="content-table-inner">
+			<div id="table-content">
+				<div id="modulesholder">					
+				</div>
+				<div id="modulecontrols"></div>
+				<div class="clear"></div>
+			</div>					
+			<table width="100">
+				<tr>
+					<td align="center">																			
+						<input type="button" value="Create" style="display:block; width:73px; height:29px" onClick="javascript: window.location.href='index.php?module=modules&action=createmodule'"/>
+					</td>
+				</tr>
+			</table>				 
+			<div class="clear"></div>
+		</div>
+	</td>
+	<td id="tbl-border-right"></td>
+</tr>
+<tr>
+	<th class="sized bottomleft"></th>
+	<td id="tbl-border-bottom">&nbsp;</td>
+	<th class="sized bottomright"></th>
+</tr>
+</table>
+<div class="clear">&nbsp;</div>
+<!-- END: table -->
+<div id="modformdiv"></div>
+<!-- END: main -->

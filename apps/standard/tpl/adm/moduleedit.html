@@ -1,0 +1,106 @@
+<!-- BEGIN: main -->
+	<script type="text/javascript" src="{GL.base}/assets/standard/js/ckeditor/ckeditor.js"></script>
+
+	<div id="page-heading">
+		<h1>Edit module</h1>
+	</div>
+
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+	<tr>
+		<th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+		<th class="topleft"></th>
+		<td id="tbl-border-top">&nbsp;</td>
+		<th class="topright"></th>
+		<th rowspan="3" class="sized">
+			<img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" />
+		</th>
+	</tr>
+	<tr>
+		<td id="tbl-border-left"></td>
+		<td>		
+			<div id="content-table-inner" >			
+				<div id="table-content">						
+						
+						<div id="adminlanguageholder">
+							<div id="adminlanguagecontainer">						
+							<!-- BEGIN: languages -->
+								<!-- BEGIN: language -->
+									<h2 class="adminlanguage">
+										<div class="{langclass}">
+											<a href="index.php?module=modules&action=bodyedit&moduleid={adminmodule}&lang={lang}" onClick="
+												javascript: if (confirm('Save canges?')){
+													$('#gotolang').val('{lang}');
+													$('#bodyeditform').submit();
+													return false;
+												}
+											">{lang}</a>
+										</div>
+									</h2>
+								<!-- END: language -->
+							<!-- END: languages -->
+							</div>
+						</div>
+						<div class="clear"></div>
+						<form action="index.php?module=modules&action={action}&moduleid={moduleid}" method="post" id="bodyeditform">
+							<input type="hidden" name="lang" value="{lang}" />
+							<input type="hidden" name="gotolang" value="{lang}" id="gotolang" />
+							<table border="0" width="90%" cellpadding="0" cellspacing="0" id="id-form">
+							<tr>
+								<th>Id:</th>
+								<td>{moduleid}</td>
+							</tr>
+							<tr>
+								<th>Title:</th>
+								<td><input type="text" value="{title}" name="title"></td>
+							</tr>							
+							<tr>
+								<th valign="top">Body:</th>
+								<td><textarea name="body" id="modbody">{body}</textarea></td>
+							</tr>
+							<tr>
+								<th valign="top">Desciption:</th>
+								<td><input type="text" name="description" value="{description}" style="width:585px"></td>
+							</tr>
+							<tr>
+								<th valign="top">Meta&nbsp;keywords:</th>
+								<td><input type="text" name="meta_keywords" value="{meta_keywords}" style="width:585px"></td>
+							</tr>
+							<tr>
+								<th valign="top">Meta&nbsp;description:</th>
+								<td><input type="text" name="meta_description" value="{meta_description}" style="width:585px"></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center">
+									<input type="submit" value="OK" style="display:block; width:73px; heght:29px" />
+								</td>
+							</tr>
+							</table>
+						</form>	
+				</div>			
+				<div class="clear"></div>		 
+			</div>	
+		</td>
+		<td id="tbl-border-right"></td>
+	</tr>
+	<tr>
+		<th class="sized bottomleft"></th>
+		<td id="tbl-border-bottom">&nbsp;</td>
+		<th class="sized bottomright"></th>
+	</tr>
+	</table>
+	<div class="clear">&nbsp;</div>
+	
+	<script>
+		CKEDITOR.replace( 'modbody',
+			{
+				height: '600',
+				//contentsCss : '{GL.base}/assets/site/css/style.css',
+				filebrowserBrowseUrl : '{GL.base}/assts/standard/js/ckfinder/ckfinder.html',
+				filebrowserFlashBrowseUrl : '{GL.base}/assts/standard/js/ckfinder/ckfinder.html?Type=Flash',
+				filebrowserUploadUrl : '{GL.base}/assts/standard/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+				filebrowserImageUploadUrl : '{GL.base}/assts/standard/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+				filebrowserFlashUploadUrl : '{GL.base}/assts/standard/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'				
+			}
+		);
+	</script>	
+<!-- END: main -->

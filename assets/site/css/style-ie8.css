@@ -1,0 +1,17 @@
+#header{
+	margin-top: 40px;
+}
+
+#menu ul{		
+	margin-top: 6px;	
+}
+
+#menu #langpane{
+	margin-top: -37px;
+}
+
+#sf-menu li.sfHover ul {
+	left:			-1em;
+	top:			26px; /* match top ul list item height */
+	z-index:		99;
+}

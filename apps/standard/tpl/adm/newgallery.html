@@ -1,0 +1,67 @@
+<!-- BEGIN: main -->
+
+<div id="page-heading">
+	<h1>Edit gallery</h1>
+</div>
+
+<table border="0" width="100%" cellpadding="0" cellspacing="0" id="content-table">
+	<tr>
+		<th rowspan="3" class="sized"><img src="images/shared/side_shadowleft.jpg" width="20" height="300" alt="" /></th>
+		<th class="topleft"></th>
+		<td id="tbl-border-top">&nbsp;</td>
+		<th class="topright"></th>
+		<th rowspan="3" class="sized">
+			<img src="images/shared/side_shadowright.jpg" width="20" height="300" alt="" />
+		</th>
+	</tr>
+	<tr>
+		<td id="tbl-border-left"></td>
+		<td>		
+			<div id="content-table-inner">					
+				<div id="table-content">
+					<form acion="index.php" method="post">
+						<input type="hidden" name="module" value="gallery">
+						<input type="hidden" name="action" value="savegallery">
+						<input type="hidden" name="galleryid" value="{galleryid}">
+						<table border="0" width="100%" cellpadding="0" cellspacing="0" id="id-form">						
+						<tr>
+							<td>Module:</td>
+							<td>
+								<input type="text" name="gallery[moduleid]" value="{storeddata_module}"  class="inp-form" />
+							</td>
+						</tr>
+						<!-- BEGIN: titles -->
+						<tr>
+							<td>Title {lang}:</td>
+							<td><input type="text" name="gallery[title][{lang}]" value="{storreddata_title}"  class="inp-form" /></td>
+						</tr>
+						<!-- END: titles -->
+						<!-- BEGIN: descriptions -->
+						<tr>
+							<td>Description {lang}:</td>
+							<td>
+								<textarea name="gallery[description][{lang}]" id="{descriptionid}"/>{storreddata_description}</textarea>
+							</td>
+						</tr>
+						<!-- END: descriptions -->
+						</table>
+						
+						<div class="ta-l">
+							<input type="submit" value="Save"  style="width:73px; height:29px"/>
+						</div>
+					</form>					
+				</div>				
+				<div class="clear"></div>			 
+			</div>		
+		</td>
+		<td id="tbl-border-right"></td>
+	</tr>
+	<tr>
+		<th class="sized bottomleft"></th>
+		<td id="tbl-border-bottom">&nbsp;</td>
+		<th class="sized bottomright"></th>
+	</tr>
+	</table>
+	<div class="clear">&nbsp;</div>
+
+<!-- END: main -->
